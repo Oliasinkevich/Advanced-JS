@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<h1>Отзывы о продуктах</h1>
+<div id="products"></div>
+<ul id="feedbacks"></ul>
+
+<h2>Добавление отзыва</h2>
+<input type="text" id="product" placeholder="Введите продукт">
+<input type="text" id="feedback" placeholder="Введите Ваш отзыв о данном продукте">
+<button id="feedback-add">Добавить отзыв</button>
+
+<script>
+    const productsDiv = document.getElementById('products');
+    const feedbacksUl = document.getElementById('feedbacks');
+    const productInput = document.getElementById('product');
+    const feedbackInput = document.getElementById('feedback');
+    const addFeedbackBtn = document.getElementById('feedback-add');
+
+    function saveFeedbackToLocalStorage(product, feedback) {
+        let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || {};
+        if (!feedbacks[product]) {
+            feedbacks[product] = [];
+        }
+        feedbacks[product].push(feedback);
+        localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+    }
+
+    function showFeedbacks(product) {
+        feedbacksUl.innerHTML = '';
+        let feedbacks = JSON.parse(localStorage.getItem('feedbacks'));
+        if (feedbacks && feedbacks[product]) {
+            feedbacks[product].forEach(feedback => {
+                const li = document.createElement('li');
+                li.textContent = feedback;
+                feedbacksUl.appendChild(li);
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Удалить';
+                deleteBtn.addEventListener('click', () => {
+                    feedbacks[product] = feedbacks[product].filter(f => f !== feedback);
+                    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+                    showFeedbacks(product);
+                });
+                li.appendChild(deleteBtn);
+            });
+        }
+    }
+
+    function showProducts() {
+        productsDiv.innerHTML = '';
+        let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || {};
+        for (let product in feedbacks) {
+            const p = document.createElement('p');
+            p.textContent = product;
+            p.addEventListener('click', () => {
+                showFeedbacks(product);
+            });
+            productsDiv.appendChild(p);
+        }
+    }
+
+    addFeedbackBtn.addEventListener('click', () => {
+        const product = productInput.value;
+        const feedback = feedbackInput.value;
+
+        if (product && feedback) {
+            saveFeedbackToLocalStorage(product, feedback);
+            productInput.value = '';
+            feedbackInput.value = '';
+            showProducts();
+        } else {
+            alert('Введите название продукта и отзыв.');
+        }
+    });
+
+    showProducts();
+
+</script>
+
+</body>
+</html>

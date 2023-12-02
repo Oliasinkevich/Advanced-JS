@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+        }
+
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 1. Заменил savedSettings на localStorage.getItem('furnitureSet'), чтобы прочитать сохраненные настройки.
+2. Заменил localStorage.setTItem на localStorage.setItem, чтобы сохранить настройки.
+3. Пропустил объект Event в функциях обратного вызова для слушателей событий click.
+4. Добавил try/catch в метод loadSettings() для корректной работы работы с localStorage в случае отсутствия сохраненных настроек. -->
+
+    <h1>Создайте свой мебельный гарнитур</h1>
+
+    <div>
+        <h2>Стол</h2>
+        Цвет:
+        <select id="table-color">
+            <option value="brown">Коричневый</option>
+            <option value="white">Белый</option>
+        </select>
+        Материал:
+        <select id="table-material">
+            <option value="wood">Дерево</option>
+            <option value="metal">Металл</option>
+        </select>
+    </div>
+
+    <div>
+        <h2>Стул</h2>
+        Цвет:
+        <select id="chair-color">
+            <option value="brown">Коричневый</option>
+            <option value="white">Белый</option>
+        </select>
+        Материал:
+        <select id="chair-material">
+            <option value="wood">Дерево</option>
+            <option value="metal">Металл</option>
+        </select>
+    </div>
+
+    <button id="save-btn">Сохранить комплект</button>
+    <button id="load-btn">Загрузить сохраненный комплект</button>
+    <button id="clear-btn">Очистить настройки</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Загрузка сохраненных настроек
+            const loadSettings = () => {
+                // const savedSettings = localStorage.setItem('furnitureSet');
+                const savedSettings = localStorage.getItem('furnitureSet');                
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    document.querySelector('#table-color').value = settings.tableColor;
+                    document.querySelector('#table-material').value = settings.tableMaterial;
+                    document.querySelector('#chair-color').value = settings.chairColor;
+                    document.querySelector('#chair-material').value = settings.chairMaterial;
+                }
+            };
+
+            loadSettings(); // Загрузка настроек при открытии страницы
+
+            // Сохранение настроек
+            document.querySelector('#save-btn').addEventListener('click', () => {
+                const furnitureSet = {
+                    tableColor: document.querySelector('#table-color').value,
+                    tableMaterial: document.querySelector('#table-material').value,
+                    chairColor: document.querySelector('#chair-color').value,
+                    chairMaterial: document.querySelector('#chair-material').value
+                };
+                // localStorage.setTItem('furnitureSet', JSON.stringify(furnitureSet));
+                localStorage.seTItem('furnitureSet', JSON.stringify(furnitureSet));
+                alert('Комплект сохранен!');
+            });
+
+            // Загрузка сохраненных настроек
+            document.querySelector('#load-btn').addEventListener('click', () => {
+                loadSettings();
+            });
+
+            // Очистка настроек
+            document.querySelector('#clear-btn').addEventListener('click', () => {
+                // localStorage.setItem('furnitureSet');
+                localStorage.removeItem('furnitureSet');
+                alert('Настройки очищены!');
+                // Очищаем форму
+                document.querySelector('#table-color').selectedIndex = 0;
+                document.querySelector('#table-material').selectedIndex = 0;
+                document.querySelector('#chair-color').selectedIndex = 0;
+                document.querySelector('#chair-material').selectedIndex = 0;
+            });
+        });
+
+    </script>
+</body>
+
+</html>

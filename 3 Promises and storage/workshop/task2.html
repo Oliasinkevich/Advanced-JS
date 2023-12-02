@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        input,
+        button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Создать интерактивную веб-страницу, где пользователи могут вводить текст, сохранять его в localStorage, а затем загружать или удалять сохраненные данные.
+
+Разработка Интерфейса:
+Создать HTML-страницу с:
+Одним текстовым полем для ввода данных пользователем.
+Тремя кнопками: "Сохранить", "Загрузить" и "Очистить".
+Местом для отображения сохраненного текста.
+
+Программирование Логики на JavaScript:
+При нажатии на "Сохранить", введенный текст должен сохраняться в localStorage.
+При нажатии на "Загрузить", текст из localStorage должен отображаться на странице.
+При нажатии на "Очистить", сохраненный текст должен быть удален из localStorage, и соответствующее сообщение отображается на странице. -->
+
+    <input type="text" id="input-text" placeholder="Введите текст">
+    <button id="save-btn">Сохранить</button>
+    <button id="load-btn">Загрузить</button>
+    <button id="clear-btn">Очистить</button>
+
+    <p id="saved-text">Здесь будет отображаться сохраненный текст.</p>
+
+    <script>
+        document.getElementById('save-btn').addEventListener('click', () => {
+            const input = document.getElementById('input-text').value;
+            localStorage.setItem('savedText', input);
+            alert('Текст сохранен!');
+        });
+
+        document.getElementById('load-btn').addEventListener('click', () => {
+            // получить из localstorage значение
+            const savedText = localStorage.getItem('savedText');
+            // текстконтентом записать значение из localstorage
+            document.getElementById('saved-text').textContent = savedText ? savedText : 'Введите текст!';
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            // удалить из localstorage значения
+            localStorage.removeItem('savedText');
+            document.getElementById('saved-text').textContent = 'Текст очищен!';
+        });
+    </script>
+</body>
+
+
+</html>
